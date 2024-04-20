@@ -10,16 +10,27 @@ import NavBar from "../components/Navbar/Navbar";
 import Footer from "../components/Footer/Footer";
 import { getbuydAPI } from "../services/allAPI";
 import { BASE_URL } from "../services/baseurl";
+import { useNavigate } from "react-router-dom";
 
 function Myshop() {
     const { cartList } = useSelector((state) => state.cart);
     const [buydata, setbuydata] = useState([]);
     const dispatch = useDispatch();
+    const navigate=useNavigate()
 
     useEffect(() => {
       window.scrollTo(0, 0);
       getbuyd();
     }, []);
+    useEffect(()=>{
+        const tokenvalue = sessionStorage.getItem("token");
+        if(!tokenvalue){
+          navigate('/login')
+
+        }
+      
+
+    },[])
 
     const getbuyd = async () => {
       try {
@@ -61,8 +72,12 @@ function Myshop() {
                           <Row className="cart-content justify-content-center">
                             <Col xs={12} sm={9} className="cart-details">
                               <h3>{item.title}</h3>
-                              <h4>${item.price}</h4>
+                              <h4>{item.price}</h4>
                             </Col>
+                            <h5 style={{marginLeft:"600px",marginTop:'-100px'}}> {item.city}</h5>
+                            <h5 style={{marginLeft:"600px",marginTop:'10px'}}> {item.city2}</h5>
+                            <h6 style={{color:'green'}}>your order is placed it will reach in 3 days</h6>
+
                             <Col xs={12} sm={3} className="cartControl"></Col>
                           </Row>
                         </Col>

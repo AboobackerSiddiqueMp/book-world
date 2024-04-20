@@ -20,12 +20,16 @@ const ProductDetails = ({ selectedProduct }) => {
   const handlePaymentSuccess = async (data) => {
     if (sessionStorage.getItem("token")) {
       const tokenvalue = sessionStorage.getItem("token");
-      console.log("Payment data===========:", data.selectedProduct);
+      console.log("Payment data===========:", data);
       const { bookimage, price, title } = data.selectedProduct
+      const {address_city,address_line1} = data.token.card
+      console.log("adress==",address_city)
       console.log("paid booki",bookimage)
       const reqbody = new FormData()
       reqbody.append("title", title)
       reqbody.append("price", price)
+      reqbody.append("city", address_city)
+      reqbody.append("city2", address_line1)
       reqbody.append("bookImage", bookimage)
       const reqheader = {
         "Content-Type": "application/json",
@@ -34,7 +38,7 @@ const ProductDetails = ({ selectedProduct }) => {
       const result = await addBuyedbooksAPI(reqbody, reqheader)
       console.log("addBuyedbooksAPI=====",result)
 
-      navigate('/myshop')
+      // navigate('/myshop')
 
 
 
@@ -45,7 +49,6 @@ const ProductDetails = ({ selectedProduct }) => {
   const handleStripeCheckout = () => {
     const additionalData = {
       selectedProduct,
-      quantity
     };
 
     return (token) => handlePaymentSuccess({ token, ...additionalData })
